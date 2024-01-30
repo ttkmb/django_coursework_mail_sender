@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="mt-auto mb-3 mx-3">
+        <a href="{% url 'client:client_list' %}" class="btn btn-lg btn-block btn-outline-warning">Все клиенты</a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-1 g-4">
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title">{{ object.fullname }}</h3>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ object.email }}</h6>
+                    <div class="card-body">
+                        {{ object.comment }}
+                    </div>
+                    <a type="submit" class="btn btn-lg btn-block btn-outline-warning" href="javascript:history.go(-1)">Назад</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
