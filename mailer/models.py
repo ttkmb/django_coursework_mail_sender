@@ -10,14 +10,13 @@ class Mailer(models.Model):
         MONTH = 'MONTH', 'Каждый месяц'
 
     class STATUS(models.TextChoices):
-        DRAFT = 'DRAFT', 'черновик'
         COMPLETE = 'COMPLETE', 'Завершено'
         CREATED = 'CREATED', 'Создано'
         LAUNCHED = 'LAUNCHED', 'Запущено'
 
     title = models.CharField(verbose_name='Название', max_length=100)
-    time_start = models.DateField(verbose_name='Время начала')
-    time_stop = models.DateField(verbose_name='Время окончания')
+    time_start = models.DateTimeField(verbose_name='Время начала')
+    time_stop = models.DateTimeField(verbose_name='Время окончания')
     frequency = models.CharField(choices=FREQUENCY.choices, verbose_name='Периодичность', max_length=100)
     status = models.CharField(choices=STATUS.choices, verbose_name='Статус рассылки', max_length=100)
     clients = models.ManyToManyField(Client, verbose_name='Клиенты', related_name='mailers')
