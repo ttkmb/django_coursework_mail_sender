@@ -12,6 +12,7 @@ def send_mail_and_log(mail_setting: Mailer, client: Mailer.clients):
     """
     mail = mail_setting.mail
     status = MailerLogger.STATUS.SUCCESS
+    mail_id = Mailer.objects.get(pk=mail_setting.pk)
     error_msg = None
     try:
         send_mail(
@@ -30,28 +31,39 @@ def send_mail_and_log(mail_setting: Mailer, client: Mailer.clients):
         log = MailerLogger.objects.create(
             status=status,
             response=error_msg,
+            mail=mail_id,
         )
         log.save()
+
+
+def process_mail_settings(mails_settings):
+    time_now = datetime.now().astimezone(None)
+    for mail_setting in mails_settings:
+        if mail_setting.time_start <= time_now <= mail_setting.time_stop:
+            for client in mail_setting.clients.all():
+                send_mail_and_log(mail_setting, client)
+        if time_now >= mail_setting.time_stop:
+            mail_setting.status = 'COMPLETE'
+            mail_setting.save()
+        mail_setting.save()
 
 
 def process_mailer_tasks():
     """
     Проверка логики рассылок, изменение статуса рассылки, отправка письма
     """
+    mails_settings = {
+        'DAY': Mailer.objects.filter(frequency='DAY', status='LAUNCHED'),
+        'WEEK': Mailer.objects.filter(frequency='WEEK', status='LAUNCHED'),
+        'MONTH': Mailer.objects.filter(frequency='MONTH', status='LAUNCHED')
+    }
     time_now = datetime.now().astimezone(None)
     mails = Mailer.objects.filter(status='CREATED', time_start__lte=time_now, time_stop__gte=time_now)
     for mail in mails:
         mail.status = 'LAUNCHED'
         mail.save()
 
-    mails_settings = Mailer.objects.filter(status='LAUNCHED')
-    for mail_setting in mails_settings:
-        time_start = mail_setting.time_start
-        time_stop = mail_setting.time_stop
-        if time_start <= time_now <= time_stop:
-            for client in mail_setting.clients.all():
-                send_mail_and_log(mail_setting, client)
-        if time_now >= time_stop:
-            mail_setting.status = 'COMPLETE'
-            mail_setting.save()
-        mail_setting.save()
+    for frequency, mails in mails_settings.items():
+        if mails.exists():
+            process_mail_settings(mails)
+            break

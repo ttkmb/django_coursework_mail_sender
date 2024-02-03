@@ -61,6 +61,8 @@ class MailerLogger(models.Model):
     date = models.DateTimeField(verbose_name='Дата и время попытки', auto_now_add=True)
     status = models.CharField(choices=STATUS.choices, verbose_name='Статус')
     response = models.TextField(verbose_name='Ответ сервера', null=True, blank=True)
+    mail = models.ForeignKey(to='Mailer', on_delete=models.CASCADE, verbose_name='Рассылка', related_name='logs',
+                             null=True, default=None)
 
     class Meta:
         verbose_name = 'Лог'

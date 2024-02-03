@@ -145,7 +145,5 @@ SERVER_EMAIL = EMAIL_HOST_USER
 EMAIL_ADDRESS = EMAIL_HOST_USER
 
 CRONJOBS = [
-    ('* * * * *', 'mailer.cron.daily_mail',),
-    ('0 9 * * *', 'mailer.cron.weekly_mail'),
-    ('0 9 1 * *', 'mailer.cron.monthly_mail'),
+    ('* * * * *', 'mailer.cron.send_mail_day_week_month'),
 ]
