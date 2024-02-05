@@ -25,7 +25,7 @@ urlpatterns = [
     path('client/', include('client.urls'), name='client'),
     path('mailer/', include('mailer.urls', namespace='mailer'), name='mailer'),
     path('', RedirectView.as_view(url=reverse_lazy('mailer:index'), permanent=True), name='index'),
-    # path('users/', include('users.urls'), name='users'),
+    path('users/', include('users.urls'), name='users'),
 ]
 
 if settings.DEBUG:

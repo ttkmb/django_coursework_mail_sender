@@ -144,6 +144,9 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
 EMAIL_ADDRESS = EMAIL_HOST_USER
 
+AUTH_USER_MODEL = 'users.User'
+
+
 CRONJOBS = [
     ('* * * * *', 'mailer.cron.send_mail_day_week_month'),
 ]

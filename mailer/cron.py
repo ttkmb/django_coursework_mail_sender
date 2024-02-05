@@ -1,4 +1,3 @@
-from mailer.models import Mailer
 from mailer.services import process_mailer_tasks
 
 
