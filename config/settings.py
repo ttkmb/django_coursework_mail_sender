@@ -153,7 +153,7 @@ CRONJOBS = [
     ('* * * * *', 'mailer.cron.send_mail_day_week_month'),
 ]
 
-CACHE_ENABLED = True
+CACHE_ENABLED = os.getenv('CACHE_ENABLED')
 
 if CACHE_ENABLED:
     CACHES = {
