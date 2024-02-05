@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 
 from client.models import Client
@@ -23,10 +24,21 @@ class Mailer(models.Model):
     mail = models.ForeignKey(to='MailerMessage', on_delete=models.CASCADE, verbose_name='Письмо',
                              related_name='settings', null=True, blank=True)
 
+    owner = models.ForeignKey(to=get_user_model(), on_delete=models.SET_NULL, verbose_name='Владелец',
+                              related_name='setting',
+                              default=None, null=True, blank=True)
+
+    mail = models.ForeignKey(to='MailerMessage', on_delete=models.CASCADE, verbose_name='Письмо',
+                             related_name='settings', null=True, blank=True)
+
     class Meta:
         verbose_name = 'Рассылка'
         verbose_name_plural = 'Рассылки'
         ordering = ['id']
+        permissions = (
+            ('view_mailer_list', 'Может просматривать список рассылок'),
+            ('change_status', 'Может отключать рассылку'),
+        )
 
     def __str__(self):
         return self.title
@@ -43,6 +55,8 @@ class Mailer(models.Model):
 class MailerMessage(models.Model):
     title = models.CharField(verbose_name='Тема письма', max_length=100)
     message = models.TextField(verbose_name='Сообщение')
+    author = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE, verbose_name='Автор',
+                               related_name='messages', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Сообщение'

@@ -31,9 +31,11 @@
                         <a href="{% url 'mailer:message_update' message.pk %}" class="btn btn-outline-warning">
                             Изменить
                         </a>
+                        {% if user.is_superuser %}
                         <a href="{% url 'mailer:message_delete' message.pk %}" class="btn btn-outline-danger">
                             Удалить
                         </a>
+                        {% endif %}
                     </div>
                 </td>
             </tr>

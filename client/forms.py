@@ -11,4 +11,5 @@ class ClientForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'fullname': forms.TextInput(attrs={'class': 'form-control'}),
             'comment': forms.Textarea(attrs={'class': 'form-control'}),
+            'owner': forms.Select(attrs={'class': 'form-control'}),
         }
