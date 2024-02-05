@@ -1,7 +1,10 @@
+from django.contrib.auth.password_validation import validate_password, get_default_password_validators
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.utils.crypto import get_random_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
@@ -25,3 +28,12 @@ def send_email_for_verify(request, user):
         to=[user.email],
     )
     email.send()
+
+
+def generate_random_password():
+    password = get_random_string(15)
+    try:
+        validate_password(password, password_validators=get_default_password_validators())
+        return password
+    except ValidationError as e:
+        return e

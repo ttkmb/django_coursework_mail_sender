@@ -1,4 +1,5 @@
 from django.urls import path
+
 from mailer.apps import MailerConfig
 from mailer.views import MessageListView, MessageCreateView, MessageUpdateView, MessageDetailView, MessageDeleteView, \
     SettingsListView, SettingsCreateView, SettingsDeleteView, SettingsUpdateView, SettingsDetailView, IndexTemplateView

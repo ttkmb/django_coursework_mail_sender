@@ -26,6 +26,7 @@ urlpatterns = [
     path('mailer/', include('mailer.urls', namespace='mailer'), name='mailer'),
     path('', RedirectView.as_view(url=reverse_lazy('mailer:index'), permanent=True), name='index'),
     path('users/', include('users.urls'), name='users'),
+    path('blog/', include('blog.urls'), name='blog'),
 ]
 
 if settings.DEBUG:

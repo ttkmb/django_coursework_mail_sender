@@ -1,0 +1,9 @@
+<div class="d-flex align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+    <a href="{% url 'mailer:index' %}">
+        <h5 class="font-weight-normal">Mailer</h5>
+    </a>
+    <nav class="ms-auto">
+        <a class="p-2 btn btn-outline-primary" href="{% url 'blog:posts' %}">Все посты</a>
+        <a class="p-2 btn btn-outline-primary" href="{% url 'blog:create' %}">Создать пост</a>
+    </nav>
+</div>

@@ -67,3 +67,17 @@ def process_mailer_tasks():
         if mails.exists():
             process_mail_settings(mails)
             break
+
+
+def get_form_cache():
+    queryset = Post.objects.filter(is_published=True)
+    if settings.CACHE_ENABLED:
+        key = 'posts'
+        cache_data = cache.get(key)
+        if cache_data is None:
+            cache_data = queryset
+            cache.set(key, cache_data)
+
+        return cache_data
+
+    return queryset

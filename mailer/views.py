@@ -1,13 +1,35 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.utils.functional import cached_property
+from django.views.decorators.cache import cache_page
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView, DetailView, TemplateView
-
+from client.models import Client
 from mailer.forms import MessageForm, SettingsForm, ModeratorForm
 from mailer.models import MailerMessage, Mailer
 
 
 class IndexTemplateView(TemplateView):
     template_name = 'mailer/index.html'
+
+    @cached_property
+    def total_count(self):
+        return Mailer.objects.count()
+
+    @cached_property
+    def active_count(self):
+        return Mailer.objects.filter(status='LAUNCHED').count()
+
+    @cached_property
+    def clients_count(self):
+        return Client.objects.all().count()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_count'] = self.total_count
+        context['active_count'] = self.active_count
+        context['clients_count'] = self.clients_count
+        return context
 
 
 '''
@@ -52,7 +74,7 @@ class MessageUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
-        if self.request.user == self.object.owner:
+        if self.request.user == self.object.author:
             return self.object
         raise PermissionError('Недостаточно прав для редактирования этого сообщения')
 

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'mailer',
     'users',
     'django_crontab',
+    'blog',
 ]
 
 MIDDLEWARE = [
@@ -151,3 +152,13 @@ LOGIN_REDIRECT_URL = '/'
 CRONJOBS = [
     ('* * * * *', 'mailer.cron.send_mail_day_week_month'),
 ]
+
+CACHE_ENABLED = True
+
+if CACHE_ENABLED:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": os.getenv('CACHES_LOCATION'),
+        }
+    }
